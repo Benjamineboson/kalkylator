@@ -1,40 +1,37 @@
 import java.util.Scanner;
 public class Kalkylator {
+    private static boolean killSwitch;
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        int i = 0;
+
         double talEtt = 0;
-        double talTva = 0;
-        byte x = 1;
-        while (i <= 1) {
-            x = 1;
+        int i = 1;
+        while (!killSwitch) {
             String rakneSatt;
-
-
-            System.out.println("Knappa in tal #"+x+": ");
+            System.out.println("Knappa in tal #1: ");
             talEtt = felHantering(talEtt);
-            x++;
-
+            String talEttToString = String.valueOf(talEtt);
             System.out.println("Välj räknesätt: ");
             rakneSatt = scan.next();
-
-            System.out.println("Knappa in tal #"+x+": ");
-            talTva = felHanteringTva(talTva);
-            x++;
-
             if (rakneSatt.charAt(0) == '+') {
-                plus(talEtt, talTva);
-            } else if (rakneSatt.charAt(0) == '-') {
-                minus(talEtt, talTva);
-            } else if (rakneSatt.charAt(0) == '*') {
-                ganger(talEtt, talTva);
-            } else {
-                delat(talEtt, talTva);
+                plusFleraParam(talEttToString);
+            }else if (rakneSatt.charAt(0) == '-') {
+                minusFleraParam(talEttToString);
+            }else if (rakneSatt.charAt(0) == '*') {
+                gangerFleraParam(talEttToString);
+            }else if (rakneSatt.charAt(0) == '/') {
+                delatFleraParam(talEttToString);
             }
-            i = scan.nextInt();
+                System.out.println("För att börja räkna tryck 1, för att avsluta programmet tryck 2: ");
+                i = scan.nextInt();
+                if (i == 2){
+                    killSwitch = true;
+                }
         }
     }
+
+
 
     static double felHantering(double talEtt){
         Scanner scan = new Scanner(System.in);
@@ -43,47 +40,49 @@ public class Kalkylator {
             return(talEtt);
         }catch (NumberFormatException exception){
             System.out.print("Använd bara siffror! Försök igen!"+"\n");
+            killSwitch = true;
             return(talEtt);
-
         }
-
     }
 
 
-    static double felHanteringTva(double talTva){
+    static double felHanteringTva(double talEtt){
         Scanner scan = new Scanner(System.in);
-
         try {
-            talTva = Double.parseDouble(scan.next());
-            return(talTva);
+            talEtt = Double.parseDouble(scan.next());
+            return(talEtt);
         }catch (NumberFormatException exception){
             System.out.print("Använd bara siffror! Försök igen!"+"\n");
-            return(talTva);
+            return(talEtt);
         }
     }
 
 
-
-    public static void plus(double plusEtt, double plusTva) {
+    public static double plus(double plusEtt, double plusTva) {
         double plusSvar = plusEtt + plusTva;
         System.out.println("Resultatet är: " + plusSvar);
         System.out.println("För att fortsätta tryck 1, För att avbryta tryck 2: ");
+        return plusSvar;
     }
 
 
-    static void minus(double minusEtt, double minusTva) {
+    public static double minus(double minusEtt, double minusTva) {
         double minusSvar = minusEtt - minusTva;
         System.out.println("Resultatet är: " + minusSvar);
         System.out.println("För att fortsätta tryck 1, För att avbryta tryck 2: ");
+        return minusSvar;
     }
 
-    static void ganger(double gangerEtt, double gangerTva) {
+
+    public static double ganger(double gangerEtt, double gangerTva) {
         double gangerSvar = gangerEtt * gangerTva;
         System.out.println("Resultatet är: " + gangerSvar);
         System.out.println("För att fortsätta tryck 1, För att avbryta tryck 2: ");
+    return gangerSvar;
     }
 
-    static void delat(double delatEtt, double delatTva) {
+
+    public static double delat(double delatEtt, double delatTva) {
         double delatSvar = delatEtt / delatTva;
         String temp = String.valueOf(delatSvar);
         if (temp.contains("NaN")){
@@ -92,11 +91,91 @@ public class Kalkylator {
             System.out.println("Resultatet är: " + temp);
         }
         System.out.println("För att fortsätta tryck 1, För att avbryta tryck 2: ");
+    return delatSvar;
+    }
+
+
+    public static void plusFleraParam (String talEttToString) {
+        Scanner scan = new Scanner(System.in);
+        byte keepAlive = 0;
+        double talEtt = 0;
+        double talTva = Double.parseDouble(talEttToString);
+        while (keepAlive < 2) {
+            System.out.print(talTva+" + ");
+            talEtt = felHanteringTva(talEtt);
+            double svar = talEtt + talTva;
+            talTva = svar;
+            System.out.println("= " + talTva);
+            System.out.print("För att fortsätta addera med tal: "+talTva+" tryck 1, för att avbryta tryck 2: ");
+            keepAlive = scan.nextByte();
+            String svarToString = String.valueOf(svar);
         }
+        return;
+    }
 
 
-        // For loop som går antal ggr som antalet nummer använda.length
+    public static void minusFleraParam (String talEttToString) {
+        Scanner scan = new Scanner(System.in);
+        byte keepAlive = 0;
+        double talEtt = 0;
+        double talTva = Double.parseDouble(talEttToString);
+        while (keepAlive < 2) {
+            System.out.print(talTva+" - ");
+            talEtt = felHanteringTva(talEtt);
+            double svar = talTva - talEtt;
+            talTva = svar;
+            System.out.println("= " + talTva);
+            System.out.print("För att fortsätta subtrahera med tal: "+talTva+" tryck 1, för att avbryta tryck 2: ");
+            keepAlive = scan.nextByte();
+            String svarToString = String.valueOf(svar);
+        }
+        return;
+    }
+
+
+    public static void gangerFleraParam (String talEttToString) {
+        Scanner scan = new Scanner(System.in);
+        byte keepAlive = 0;
+        double talEtt = 0;
+        double talTva = Double.parseDouble(talEttToString);
+        while (keepAlive < 2) {
+            System.out.print(talTva+" * ");
+            talEtt = felHanteringTva(talEtt);
+            double svar = talTva * talEtt;
+            talTva = svar;
+            System.out.println("= " + talTva);
+            System.out.print("För att fortsätta multiplicera med tal: "+talTva+" tryck 1, för att avbryta tryck 2: ");
+            keepAlive = scan.nextByte();
+            String svarToString = String.valueOf(svar);
+        }
+        return;
+    }
+
+
+    public static void delatFleraParam (String talEttToString) {
+        Scanner scan = new Scanner(System.in);
+        byte keepAlive = 0;
+        double talEtt = 0;
+        double talTva = Double.parseDouble(talEttToString);
+        while (keepAlive < 2) {
+            System.out.print(talTva+" / ");
+            talEtt = felHanteringTva(talEtt);
+            double svar = talTva / talEtt;
+            talTva = svar;
+            String temp = String.valueOf(talTva);
+            if (temp.contains("NaN")){
+                System.out.println("Nu blev det fel! Försök igen och dela inte 0 med 0.");
+            }else {
+                System.out.println("= " + talTva);
+            }
+            System.out.print("För att fortsätta dividera med tal: "+talTva+" tryck 1, för att avbryta tryck 2: ");
+            keepAlive = scan.nextByte();
+            String svarToString = String.valueOf(svar);
+        }
+        return;
+    }
 
 }
+
 
 
